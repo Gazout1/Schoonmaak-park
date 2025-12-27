@@ -45,36 +45,43 @@
       position: relative;
       transition: background 0.5s ease, color 0.5s ease;
     }
-    /* Moderne decor ballen met animatie */
+    /* Moderne decor ballen met scroll-parallax + float animatie */
     .decor-balls {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: -1;
+      overflow: hidden;
     }
     .ball {
       position: absolute;
       background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(81,212,250,0.4));
       border-radius: 50%;
-      box-shadow: 0 0 40px rgba(81,212,250,0.5), inset 0 0 20px rgba(255,255,255,0.6);
-      backdrop-filter: blur(10px);
-      animation: float 25s infinite ease-in-out, pulse 6s infinite ease-in-out;
+      box-shadow: 0 0 60px rgba(81,212,250,0.6), inset 0 0 30px rgba(255,255,255,0.7);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      animation: float 30s infinite ease-in-out, pulse 8s infinite ease-in-out;
+      transform: translateZ(0); /* Voor smooth rendering */
     }
-    .ball:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 5%; animation-delay: 0s; }
-    .ball:nth-child(2) { width: 250px; height: 250px; top: 40%; right: 10%; animation-delay: 5s; }
-    .ball:nth-child(3) { width: 350px; height: 350px; bottom: 15%; left: 20%; animation-delay: 10s; }
-    .ball:nth-child(4) { width: 200px; height: 200px; bottom: 30%; right: 15%; animation-delay: 15s; }
-    .ball:nth-child(5) { width: 280px; height: 280px; top: 60%; left: 50%; animation-delay: 20s; }
+    .ball:nth-child(1) { width: 400px; height: 400px; top: -10%; left: -5%; animation-delay: 0s; }
+    .ball:nth-child(2) { width: 350px; height: 350px; top: 30%; right: -10%; animation-delay: 8s; }
+    .ball:nth-child(3) { width: 500px; height: 500px; bottom: -20%; left: 10%; animation-delay: 15s; }
+    .ball:nth-child(4) { width: 300px; height: 300px; bottom: 20%; right: 5%; animation-delay: 22s; }
+    .ball:nth-child(5) { width: 450px; height: 450px; top: 50%; left: 40%; animation-delay: 30s; }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      25% { transform: translateY(-40px) translateX(30px); }
-      50% { transform: translateY(-80px) translateX(-30px); }
-      75% { transform: translateY(-30px) translateX(40px); }
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(80px, -100px) rotate(10deg); }
+      50% { transform: translate(-100px, -150px) rotate(-15deg); }
+      75% { transform: translate(50px, -80px) rotate(5deg); }
     }
     @keyframes pulse {
-      0%, 100% { opacity: 0.7; transform: scale(1); }
-      50% { opacity: 0.9; transform: scale(1.05); }
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.08); }
+    }
+    /* Parallax effect bij scrollen */
+    .ball {
+      will-change: transform;
     }
     header {
       position: relative;
@@ -311,7 +318,7 @@
 </head>
 <body>
 
-  <!-- Moderne decor ballen op de achtergrond -->
+  <!-- Moderne decor ballen met animatie + parallax -->
   <div class="decor-balls">
     <div class="ball"></div>
     <div class="ball"></div>
