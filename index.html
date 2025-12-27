@@ -52,12 +52,17 @@
       overflow: hidden;
       z-index: 1;
     }
-    .logo-container {
+    .header-top {
       position: absolute;
-      top: 2rem;
-      left: 2rem;
+      top: 1.5rem; /* Logo en menu op dezelfde hoogte */
+      right: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
       z-index: 1001;
-      width: 200px;
+    }
+    .logo-container {
+      width: 160px; /* Iets kleiner op mobiel */
       height: auto;
     }
     .logo-container img {
@@ -66,14 +71,10 @@
       display: block;
     }
     .hamburger {
-      position: absolute;
-      top: 2rem;
-      right: 2rem;
       width: 40px;
       height: 30px;
       cursor: pointer;
-      z-index: 1001;
-      transition: transform 0.3s ease;
+      position: relative;
     }
     .hamburger span {
       position: absolute;
@@ -145,7 +146,7 @@
       visibility: visible;
     }
     .header-content {
-      margin-top: 3rem; /* Meer ruimte boven de tagline */
+      margin-top: 4rem; /* Meer ruimte onder logo/menu */
     }
     .tagline {
       font-size: 1.8rem;
@@ -253,10 +254,12 @@
       .nav a:hover { color: var(--primary-light); }
       .theme-switch { display: none; }
       header { padding: 10rem 2rem 12rem; }
+      .header-top {
+        top: 2rem;
+        right: 2rem;
+      }
       .logo-container {
-        position: static;
-        margin: 0 auto 1.5rem;
-        width: 350px;
+        width: 240px;
       }
       .tagline { font-size: 2.2rem; }
     }
@@ -272,13 +275,15 @@
   </div>
 
   <header>
-    <div class="logo-container">
-      <img src="SchoonmaakPark.png" alt="Schoonmaak Park Logo">
-    </div>
-    <div class="hamburger" id="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
+    <div class="header-top">
+      <div class="logo-container">
+        <img src="SchoonmaakPark.png" alt="Schoonmaak Park Logo">
+      </div>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
     <nav class="nav" id="navMenu">
       <a href="#home" onclick="scrollToSection('#home')">Home</a>
