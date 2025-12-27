@@ -41,37 +41,30 @@
       background: linear-gradient(to bottom, var(--bg-start), var(--bg-end));
       transition: background 0.5s ease, color 0.5s ease;
       position: relative;
+      overflow-x: hidden;
     }
-    /* Zwevende glossy ballen op de achtergrond */
-    .decor-balls {
+    /* Zwevende bouncende ballen */
+    .bubbles {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: -1;
     }
-    .ball {
+    .bubble {
       position: absolute;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(81,212,250,0.4));
       border-radius: 50%;
-      box-shadow: 0 0 40px rgba(81,212,250,0.5), inset 0 0 20px rgba(255,255,255,0.6);
+      box-shadow: 0 0 40px var(--primary-light);
       backdrop-filter: blur(10px);
-      animation: float 25s infinite ease-in-out, pulse 6s infinite ease-in-out;
+      -webkit-backdrop-filter: blur(10px);
+      will-change: transform;
+      transition: transform 0.05s linear;
     }
-    .ball:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 5%; animation-delay: 0s; }
-    .ball:nth-child(2) { width: 250px; height: 250px; top: 40%; right: 10%; animation-delay: 5s; }
-    .ball:nth-child(3) { width: 350px; height: 350px; bottom: 15%; left: 20%; animation-delay: 10s; }
-    .ball:nth-child(4) { width: 200px; height: 200px; bottom: 30%; right: 15%; animation-delay: 15s; }
-    .ball:nth-child(5) { width: 280px; height: 280px; top: 60%; left: 50%; animation-delay: 20s; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      25% { transform: translateY(-40px) translateX(30px); }
-      50% { transform: translateY(-80px) translateX(-30px); }
-      75% { transform: translateY(-30px) translateX(40px); }
+    [data-theme="light"] .bubble {
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(79,195,247,0.6));
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.7; transform: scale(1); }
-      50% { opacity: 0.9; transform: scale(1.05); }
+    [data-theme="dark"] .bubble {
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.4));
+      box-shadow: 0 0 50px rgba(255,255,255,0.8);
     }
     header {
       position: relative;
@@ -306,13 +299,13 @@
 </head>
 <body>
 
-  <!-- Zwevende glossy ballen -->
-  <div class="decor-balls">
-    <div class="ball"></div>
-    <div class="ball"></div>
-    <div class="ball"></div>
-    <div class="ball"></div>
-    <div class="ball"></div>
+  <!-- Zwevende bouncende ballen -->
+  <div class="bubbles">
+    <div class="bubble" style="width: 300px; height: 300px; top: 10%; left: 5%;"></div>
+    <div class="bubble" style="width: 250px; height: 250px; top: 40%; right: 10%;"></div>
+    <div class="bubble" style="width: 350px; height: 350px; bottom: 15%; left: 20%;"></div>
+    <div class="bubble" style="width: 200px; height: 200px; bottom: 30%; right: 15%;"></div>
+    <div class="bubble" style="width: 280px; height: 280px; top: 60%; left: 50%;"></div>
   </div>
 
   <header>
@@ -409,6 +402,51 @@
   </footer>
 
   <script>
+    // Bouncing balls met collision
+    const bubbles = document.querySelectorAll('.bubble');
+    const bubbleArray = Array.from(bubbles).map(bubble => ({
+      el: bubble,
+      x: parseFloat(bubble.style.left) || Math.random() * window.innerWidth,
+      y: parseFloat(bubble.style.top) || Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 2, // snelheid
+      vy: (Math.random() - 0.5) * 2,
+      radius: parseFloat(bubble.style.width) / 2
+    }));
+
+    function updateBubbles() {
+      bubbleArray.forEach((bubble, i) => {
+        bubble.x += bubble.vx;
+        bubble.y += bubble.vy;
+
+        // Bounce op randen
+        if (bubble.x < 0 || bubble.x > window.innerWidth - bubble.radius * 2) bubble.vx *= -1;
+        if (bubble.y < 0 || bubble.y > window.innerHeight - bubble.radius * 2) bubble.vy *= -1;
+
+        // Collision met andere ballen
+        bubbleArray.forEach((other, j) => {
+          if (i !== j) {
+            const dx = bubble.x - other.x;
+            const dy = bubble.y - other.y;
+            const distance = Math.sqrt(dx*dx + dy*dy);
+            if (distance < bubble.radius + other.radius) {
+              // Elastic bounce
+              const angle = Math.atan2(dy, dx);
+              bubble.vx = Math.cos(angle) * 1.5;
+              bubble.vy = Math.sin(angle) * 1.5;
+              other.vx = -Math.cos(angle) * 1.5;
+              other.vy = -Math.sin(angle) * 1.5;
+            }
+          }
+        });
+
+        bubble.el.style.left = `${bubble.x}px`;
+        bubble.el.style.top = `${bubble.y}px`;
+      });
+
+      requestAnimationFrame(updateBubbles);
+    }
+    updateBubbles();
+
     // Voorkom auto-scroll
     if (window.location.hash) {
       history.replaceState(null, null, window.location.pathname);
