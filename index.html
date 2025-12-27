@@ -52,17 +52,24 @@
       overflow: hidden;
       z-index: 1;
     }
-    .header-top {
+    .header-bar {
       position: absolute;
-      top: 1.5rem; /* Logo en menu op dezelfde hoogte */
-      right: 1.5rem;
+      top: 1rem;
+      left: 1rem;
+      right: 1rem;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 1rem;
+      background: linear-gradient(135deg, var(--glass-top), var(--glass-bottom));
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow);
+      padding: 0.8rem 1.2rem;
       z-index: 1001;
     }
     .logo-container {
-      width: 160px; /* Iets kleiner op mobiel */
+      width: 180px;
       height: auto;
     }
     .logo-container img {
@@ -146,7 +153,7 @@
       visibility: visible;
     }
     .header-content {
-      margin-top: 4rem; /* Meer ruimte onder logo/menu */
+      margin-top: 6rem; /* Meer ruimte onder de header-bar */
     }
     .tagline {
       font-size: 1.8rem;
@@ -256,10 +263,12 @@
       header { padding: 10rem 2rem 12rem; }
       .header-top {
         top: 2rem;
+        left: 2rem;
         right: 2rem;
+        padding: 1rem 1.5rem;
       }
       .logo-container {
-        width: 240px;
+        width: 280px;
       }
       .tagline { font-size: 2.2rem; }
     }
@@ -275,7 +284,7 @@
   </div>
 
   <header>
-    <div class="header-top">
+    <div class="header-bar">
       <div class="logo-container">
         <img src="SchoonmaakPark.png" alt="Schoonmaak Park Logo">
       </div>
